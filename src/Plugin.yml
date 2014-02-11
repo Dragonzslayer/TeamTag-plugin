@@ -1,0 +1,40 @@
+name: teamTag
+main: Dragonzslayer.teamTag.main
+version: 0.1
+author: Dragonzslayer_
+commands:
+  teamtag:
+    description: play a game of TeamTag!
+    aliases: [tt, ttag]
+permissions:
+  TeamTag.player:
+    description: Player Commands.
+    default: true
+  TeamTag.admin.*:
+    description: All admin commands.
+    default: op
+    children:
+        TeamTag.admin.start: true
+        TeamTag.admin.stop: true
+        TeamTag.admin.setspawn: true
+        TeamTag.admin.kick: true
+        TeamTag.admin.setLobby: true
+        TeamTag.admin.reload: true
+        TeamTag.admin.balance: true
+        TeamTag.admin.help: true
+  TeamTag.admin.help:
+    default: op
+  TeamTag.admin.start:
+    default: op 
+  TeamTag.admin.stop:
+    default: op 
+  TeamTag.admin.setspawn: 
+    default: op
+  TeamTag.admin.kick: 
+    default: op
+  TeamTag.admin.setLobby: 
+    default: op
+  TeamTag.admin.reload: 
+    default: op
+  TeamTag.admin.balance: 
+    default: op
