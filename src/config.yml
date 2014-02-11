@@ -1,0 +1,5 @@
+LowAmmoMessage: true
+ReloadBlockID: 42
+AutoStart:
+    Enabled: true
+    NumberToStart: 14
