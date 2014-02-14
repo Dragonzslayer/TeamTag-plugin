@@ -1,14 +1,22 @@
 package Dragonzslayer.teamTag.Commands;
 
+import java.util.Arrays;
+import java.util.List;
+
 import Dragonzslayer.teamTag.main;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class Join
 {
 	private main plugin = null;
+@SuppressWarnings({ "deprecation", "rawtypes" })
 public Join(CommandSender sender, String[] args)
   {
 	this.plugin = main.getInstance();
@@ -17,12 +25,54 @@ public Join(CommandSender sender, String[] args)
     	if ((args.length == 1)){
      	   if (this.plugin.redTeam.size() < this.plugin.blueTeam.size()) {
      	      if (!this.plugin.redTeam.contains(player)) {
-     	      this.plugin.joinTeam.joinRedTeam(player);
+     	 		player.sendMessage(this.plugin.pPrefix + ChatColor.RED + " You joined the Red team!.");
+     	        player.sendMessage(this.plugin.pPrefix + ChatColor.GOLD + " To vote to start the game do: /tt vote");
+     	        
+     	        this.plugin.tagPlayers.add(player);
+     	        this.plugin.redTeam.add(player);
+
+     	       int x = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "X", player.getWorld().getSpawnLocation().getBlockX());
+     	      int y = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Y", player.getWorld().getSpawnLocation().getBlockY());
+     	      int z = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Z", player.getWorld().getSpawnLocation().getBlockZ());
+
+     	        player.teleport(new Location(player.getWorld(), x, y, z));
+
+     	        ItemStack[] inv = player.getInventory().getContents();
+     	        List invList = Arrays.asList(inv);
+     	        this.plugin.getConfig().set("Inventories." + player.getName(), invList);
+     	        this.plugin.saveConfig();
+                player.getInventory().clear();
+                this.plugin.Methods.removeArmor(player);
+                this.plugin.Methods.joinRed(player);
+     	        player.setGameMode(GameMode.ADVENTURE);
+     	        player.getInventory().setItemInHand(new ItemStack(Material.SNOW_BALL, 64));
+     	        player.updateInventory();
      	      this.checkNumber();
      	      }
      	    }
      	   else if (!this.plugin.blueTeam.contains(player)) {
-     	      this.plugin.joinTeam.joinBlueTeam(player);
+     	        player.sendMessage(this.plugin.pPrefix + ChatColor.BLUE + " You joined the Blue team!");
+     	        player.sendMessage(this.plugin.pPrefix + ChatColor.GOLD + " To vote to start the game do: /tt vote");
+     	        
+     	        this.plugin.tagPlayers.add(player);
+     	        this.plugin.blueTeam.add(player);
+
+     	       int x = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "X", player.getWorld().getSpawnLocation().getBlockX());
+     	      int y = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Y", player.getWorld().getSpawnLocation().getBlockY());
+     	      int z = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Z", player.getWorld().getSpawnLocation().getBlockZ());
+
+     	        player.teleport(new Location(player.getWorld(), x, y, z));
+
+     	        ItemStack[] inv = player.getInventory().getContents();
+     	        List invList = Arrays.asList(inv);
+     	        this.plugin.getConfig().set("Inventories." + player.getName(), invList);
+     	        this.plugin.saveConfig();
+                player.getInventory().clear();
+                this.plugin.Methods.removeArmor(player);
+                this.plugin.Methods.joinBlue(player);
+     	        player.setGameMode(GameMode.ADVENTURE);
+     	        player.getInventory().setItemInHand(new ItemStack(Material.SNOW_BALL, 64));
+     	        player.updateInventory();
      	      this.checkNumber();
      	   }
      	}
@@ -35,7 +85,28 @@ public Join(CommandSender sender, String[] args)
               sender.sendMessage(this.plugin.pPrefix + ChatColor.RED + " Please use /teamtag balance!");
               }
             }
-         this.plugin.joinTeam.joinBlueTeam(player);
+            player.sendMessage(this.plugin.pPrefix + ChatColor.BLUE + " You joined the Blue team!");
+            player.sendMessage(this.plugin.pPrefix + ChatColor.GOLD + " To vote to start the game do: /tt vote");
+            
+            this.plugin.tagPlayers.add(player);
+            this.plugin.blueTeam.add(player);
+
+            int x = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "X", player.getWorld().getSpawnLocation().getBlockX());
+            int y = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Y", player.getWorld().getSpawnLocation().getBlockY());
+            int z = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Z", player.getWorld().getSpawnLocation().getBlockZ());
+
+            player.teleport(new Location(player.getWorld(), x, y, z));
+
+            ItemStack[] inv = player.getInventory().getContents();
+            List invList = Arrays.asList(inv);
+            this.plugin.getConfig().set("Inventories." + player.getName(), invList);
+            this.plugin.saveConfig();
+            player.getInventory().clear();
+            this.plugin.Methods.removeArmor(player);
+            this.plugin.Methods.joinBlue(player);
+            player.setGameMode(GameMode.ADVENTURE);
+            player.getInventory().setItemInHand(new ItemStack(Material.SNOW_BALL, 64));
+            player.updateInventory();
          this.checkNumber();
           }
           else if (this.plugin.blueTeam.contains(player)) {
@@ -55,7 +126,28 @@ public Join(CommandSender sender, String[] args)
                 player.sendMessage(this.plugin.pPrefix + ChatColor.RED + " Please use /teamtag balance!");
               }
             }
-          this.plugin.joinTeam.joinRedTeam(player);
+    		player.sendMessage(this.plugin.pPrefix + ChatColor.RED + " You joined the Red team!.");
+            player.sendMessage(this.plugin.pPrefix + ChatColor.GOLD + " To vote to start the game do: /tt vote");
+            
+            this.plugin.tagPlayers.add(player);
+            this.plugin.redTeam.add(player);
+
+            int x = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "X", player.getWorld().getSpawnLocation().getBlockX());
+            int y = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Y", player.getWorld().getSpawnLocation().getBlockY());
+            int z = this.plugin.getConfig().getInt(player.getWorld().getName() + "." + "lobby" + "." + "Z", player.getWorld().getSpawnLocation().getBlockZ());
+
+            player.teleport(new Location(player.getWorld(), x, y, z));
+
+            ItemStack[] inv = player.getInventory().getContents();
+            List invList = Arrays.asList(inv);
+            this.plugin.getConfig().set("Inventories." + player.getName(), invList);
+            this.plugin.saveConfig();
+            player.getInventory().clear();
+            this.plugin.Methods.removeArmor(player);
+            this.plugin.Methods.joinRed(player);
+            player.setGameMode(GameMode.ADVENTURE);
+            player.getInventory().setItemInHand(new ItemStack(Material.SNOW_BALL, 64));
+            player.updateInventory();
           this.checkNumber();
           }
           else if (this.plugin.blueTeam.contains(player)) {
