@@ -2,10 +2,8 @@ package Dragonzslayer.teamTag;
 
 import Dragonzslayer.teamTag.Commands.CommandManager;
 import Dragonzslayer.teamTag.Util.Methods;
-import Dragonzslayer.teamTag.Util.joinTeam;
 import Dragonzslayer.teamTag.Util.joinLobby;
 import Dragonzslayer.teamTag.Util.startGame;
-import Dragonzslayer.teamTag.Commands.Join;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,10 +39,8 @@ public class main extends JavaPlugin
   public Logger logger = Logger.getLogger("Minecraft");
   private static main plugin = null;
   public Methods Methods;
-  public joinTeam joinTeam;
   public joinLobby joinLobby;
   public startGame startGame;
-  public Join Join;
   public List<Player> votedPlayers = new ArrayList<Player>();
   public List<Player> tagPlayers = new ArrayList<Player>();
   public List<Player> redTeam = new ArrayList<Player>();
@@ -84,6 +80,8 @@ public class main extends JavaPlugin
     reloadConfig();
 
     Methods = new Methods();
+    joinLobby = new joinLobby();
+    startGame = new startGame();
     getCommand("teamtag").setExecutor(new CommandManager());
   }
   public void writeToConsole(String Message) {
@@ -187,6 +185,7 @@ public class main extends JavaPlugin
       }
     }
   }
+
 
   @EventHandler
   public void onPlayerTeleport(PlayerTeleportEvent e) { PlayerTeleportEvent.TeleportCause cause = e.getCause();
