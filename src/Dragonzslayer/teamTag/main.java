@@ -103,46 +103,64 @@ public class main extends JavaPlugin
 
   @EventHandler(priority=EventPriority.HIGHEST)
   public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		if(event.getDamager() instanceof Snowball && event.getEntity() instanceof Player) {
+		if((event.getDamager() instanceof Snowball) && (event.getEntity() instanceof Player)) {
 			Snowball s = (Snowball)event.getDamager();
 			Player damaged = (Player)event.getEntity();
 			if(s.getShooter() instanceof Player) {
-			Player shooter  = ((Player)s.getShooter());
-			if ((redTeam.contains(damaged)) || (redTeam.contains(shooter)))
-        {
-          shooter.sendMessage(pPrefix + ChatColor.YELLOW + " you've tagged " + ChatColor.GREEN + damaged.getName());
-          damaged.sendMessage(pPrefix + ChatColor.YELLOW + " you've been tagged by " + ChatColor.GREEN + shooter.getName());
+				Player shooter  = ((Player)s.getShooter());
+				if ((redTeam.contains(damaged)) || (redTeam.contains(shooter))){
+					shooter.sendMessage(pPrefix + ChatColor.YELLOW + " you've tagged " + ChatColor.GREEN + damaged.getName());
+					damaged.sendMessage(pPrefix + ChatColor.YELLOW + " you've been tagged by " + ChatColor.GREEN + shooter.getName());
 
-          kills.put(shooter.getName(), Integer.valueOf(kills.containsKey(shooter.getName()) ? ((Integer)kills.get(shooter.getName())).intValue() + 1 : 1));
-          deaths.put(damaged.getName(), Integer.valueOf(deaths.containsKey(damaged.getName()) ? ((Integer)deaths.get(damaged.getName())).intValue() + 1 : 1));
-          redTeam.remove(damaged);
-          blueTeam.add(damaged);
-          Methods.joinBlue(damaged);
-          if (start.containsKey(startString)) {
-            int x = getConfig().getInt(damaged.getWorld().getName() + "." + "blue" + "." + "X", damaged.getWorld().getSpawnLocation().getBlockX());
-            int y = getConfig().getInt(damaged.getWorld().getName() + "." + "blue" + "." + "Y", damaged.getWorld().getSpawnLocation().getBlockY());
-            int z = getConfig().getInt(damaged.getWorld().getName() + "." + "blue" + "." + "Z", damaged.getWorld().getSpawnLocation().getBlockZ());
-            damaged.teleport(new Location(damaged.getWorld(), x, y, z));
-          }
-        }
+					kills.put(shooter.getName(), Integer.valueOf(kills.containsKey(shooter.getName()) ? ((Integer)kills.get(shooter.getName())).intValue() + 1 : 1));
+					deaths.put(damaged.getName(), Integer.valueOf(deaths.containsKey(damaged.getName()) ? ((Integer)deaths.get(damaged.getName())).intValue() + 1 : 1));
+					redTeam.remove(damaged);
+					blueTeam.add(damaged);
+					Methods.joinBlue(damaged);
+					if (start.containsKey(startString)) {
+						int x = getConfig().getInt(damaged.getWorld().getName() + "." + "blue" + "." + "X", damaged.getWorld().getSpawnLocation().getBlockX());
+						int y = getConfig().getInt(damaged.getWorld().getName() + "." + "blue" + "." + "Y", damaged.getWorld().getSpawnLocation().getBlockY());
+						int z = getConfig().getInt(damaged.getWorld().getName() + "." + "blue" + "." + "Z", damaged.getWorld().getSpawnLocation().getBlockZ());
+						damaged.teleport(new Location(damaged.getWorld(), x, y, z));
+					}
+					else{
+						damaged.sendMessage(ChatColor.RED + "We're sorry, but an internal error has occured.");
+						blueTeam.remove(damaged);
+						damaged.getInventory().clear();
+						Methods.removeArmor(damaged);
+						Methods.restoreInv(damaged);
+						tagPlayers.remove(damaged);
+						joinLobby.tpToLobby(damaged);
+					}
+				}
 
-        if ((blueTeam.contains(shooter)) || (blueTeam.contains(damaged)))
-          shooter.sendMessage(pPrefix + ChatColor.YELLOW + " you've tagged " + ChatColor.GREEN + damaged.getName());
-        damaged.sendMessage(pPrefix + ChatColor.YELLOW + " you've been tagged by " + ChatColor.GREEN + shooter.getName());
+				if ((blueTeam.contains(shooter)) || (blueTeam.contains(damaged))){
+					shooter.sendMessage(pPrefix + ChatColor.YELLOW + " you've tagged " + ChatColor.GREEN + damaged.getName());
+					damaged.sendMessage(pPrefix + ChatColor.YELLOW + " you've been tagged by " + ChatColor.GREEN + shooter.getName());
 
-        kills.put(shooter.getName(), Integer.valueOf(kills.containsKey(shooter.getName()) ? ((Integer)kills.get(shooter.getName())).intValue() + 1 : 1));
-        deaths.put(damaged.getName(), Integer.valueOf(deaths.containsKey(damaged.getName()) ? ((Integer)deaths.get(damaged.getName())).intValue() + 1 : 1));
-        blueTeam.remove(damaged);
-        redTeam.add(damaged);
-        Methods.joinRed(damaged);
-        if (start.containsKey(startString)) {
-          int x = getConfig().getInt(damaged.getWorld().getName() + "." + "red" + "." + "X", damaged.getWorld().getSpawnLocation().getBlockX());
-          int y = getConfig().getInt(damaged.getWorld().getName() + "." + "red" + "." + "Y", damaged.getWorld().getSpawnLocation().getBlockY());
-          int z = getConfig().getInt(damaged.getWorld().getName() + "." + "red" + "." + "Z", damaged.getWorld().getSpawnLocation().getBlockZ());
-          damaged.teleport(new Location(damaged.getWorld(), x, y, z));
-        }
-      }
-    }
+					kills.put(shooter.getName(), Integer.valueOf(kills.containsKey(shooter.getName()) ? ((Integer)kills.get(shooter.getName())).intValue() + 1 : 1));
+					deaths.put(damaged.getName(), Integer.valueOf(deaths.containsKey(damaged.getName()) ? ((Integer)deaths.get(damaged.getName())).intValue() + 1 : 1));
+					blueTeam.remove(damaged);
+					redTeam.add(damaged);
+					Methods.joinRed(damaged);
+					if (start.containsKey(startString)) {
+						int x = getConfig().getInt(damaged.getWorld().getName() + "." + "red" + "." + "X", damaged.getWorld().getSpawnLocation().getBlockX());
+						int y = getConfig().getInt(damaged.getWorld().getName() + "." + "red" + "." + "Y", damaged.getWorld().getSpawnLocation().getBlockY());
+						int z = getConfig().getInt(damaged.getWorld().getName() + "." + "red" + "." + "Z", damaged.getWorld().getSpawnLocation().getBlockZ());
+						damaged.teleport(new Location(damaged.getWorld(), x, y, z));
+					}
+					else{
+						damaged.sendMessage(ChatColor.RED + "We're sorry, but an internal error has occured.");
+						redTeam.remove(damaged);
+						damaged.getInventory().clear();
+						Methods.removeArmor(damaged);
+						Methods.restoreInv(damaged);
+						tagPlayers.remove(damaged);
+						joinLobby.tpToLobby(damaged);
+					}
+				}
+			}
+		}
   }
 
   @SuppressWarnings("deprecation")
@@ -167,7 +185,7 @@ public class main extends JavaPlugin
       }
       if (event.getAction() == Action.RIGHT_CLICK_AIR) {
         boolean message = getConfig().getBoolean("LowAmoMessage");
-        if (player.getInventory().contains(new ItemStack(Material.SNOW_BALL, 8))){
+        if (player.getItemInHand().equals(new ItemStack(Material.SNOW_BALL, 8))){
             if (message)
             {
               int blockid = getConfig().getInt("ReloadBlockID");
